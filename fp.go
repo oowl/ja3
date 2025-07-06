@@ -283,6 +283,11 @@ func ParseSpec(clienthello []byte) (clientHelloInfo *Spec, err error) {
 		var extension uint16
 		var extData cryptobyte.String
 		if extensionsData.ReadUint16(&extension) && extensionsData.ReadUint16LengthPrefixed(&extData) {
+			if extension == 21 {
+				// skip padding tls extension
+				continue
+
+			}
 			clientHelloInfo.Extensions = append(clientHelloInfo.Extensions, Extension{
 				Type: extension,
 				Data: extData,
